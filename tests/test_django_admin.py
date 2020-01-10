@@ -3,6 +3,8 @@ import re
 import uuid
 
 import pytest
+from django.core.exceptions import ObjectDoesNotExist
+
 try:
     from django.core.urlresolvers import reverse  # Django 1.x
 except ImportError:
@@ -34,7 +36,7 @@ def test_model_admin_post(admin_client):
     assert b"Select a valid choice" not in text
     try:
         inst = MyModel.objects.get(random_code=secret_uuid)
-    except DoesNotExist:
+    except ObjectDoesNotExist:
         assert False, "Object wasn't created in the database"
     assert inst.color == Color.RED, "Redness not assured"
     assert inst.taste == Taste.UMAMI, "Umami not there"
